@@ -86,7 +86,7 @@ class CleaningRobot:
             self.recharge_led_on = False
             GPIO.output(self.CLEANING_SYSTEM_PIN, GPIO.HIGH)
             self.cleaning_system_on = True
-        elif self.ibs.get_charge_left() < 10:
+        else:
             GPIO.output(self.RECHARGE_LED_PIN, GPIO.HIGH)
             self.recharge_led_on = True
             GPIO.output(self.CLEANING_SYSTEM_PIN, GPIO.LOW)
