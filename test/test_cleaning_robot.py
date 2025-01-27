@@ -85,3 +85,11 @@ class TestCleaningRobot(TestCase):
                  ((robot.RECHARGE_LED_PIN, True),)]
         mock_pins.assert_has_calls(calls, any_order=True)
         self.assertFalse(robot.cleaning_system_on)
+
+    @patch.object(CleaningRobot, "activate_wheel_motor")
+    def test_execute_command_forward_Y_axis(self, mock_robot: Mock):
+        robot = CleaningRobot()
+        robot.initialize_robot()
+        result = robot.execute_command(robot.FORWARD)
+        mock_robot.assert_called_once()
+        self.assertEqual("(0,1,N)", result)
