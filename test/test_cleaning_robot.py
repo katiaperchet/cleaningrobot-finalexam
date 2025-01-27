@@ -22,3 +22,8 @@ class TestCleaningRobot(TestCase):
         robot = CleaningRobot()
         robot.initialize_robot()
         self.assertEqual(robot.N, robot.heading)
+
+    def test_robot_status_initial(self):
+        robot = CleaningRobot()
+        robot.initialize_robot()
+        self.assertEqual("(0,0,N)", robot.robot_status())
