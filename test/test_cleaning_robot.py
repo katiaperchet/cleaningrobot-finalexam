@@ -44,3 +44,13 @@ class TestCleaningRobot(TestCase):
         calls = [((robot.RECHARGE_LED_PIN, False),)]
         mock_led.assert_has_calls(calls)
         self.assertFalse(robot.recharge_led_on)
+
+    @patch.object(GPIO, "output")
+    @patch.object(IBS, "get_charge_left")
+    def test_charge_left_more_10_cleaning_system_on(self, mock_battery: Mock, mock_cleaning_system: Mock):
+        mock_battery.return_value = 11
+        robot = CleaningRobot()
+        robot.manage_cleaning_system()
+        calls = [((robot.CLEANING_SYSTEM_PIN, True),)]
+        mock_cleaning_system.assert_has_calls(calls)
+        self.assertTrue(robot.cleaning_system_on)
