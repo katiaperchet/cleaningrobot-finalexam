@@ -13,4 +13,7 @@ class TestCleaningRobot(TestCase):
         robot.initialize_robot()
         self.assertEqual(0, robot.pos_x)
 
-
+    def test_robot_initialization_axis_Y(self):
+        robot = CleaningRobot()
+        robot.initialize_robot()
+        self.assertEqual(0, robot.pos_y)
