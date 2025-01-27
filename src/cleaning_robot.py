@@ -81,8 +81,8 @@ class CleaningRobot:
         pass
 
     def manage_cleaning_system(self) -> None:
-        # To be implemented
-        pass
+        GPIO.output(self.RECHARGE_LED_PIN, GPIO.LOW)
+        self.recharge_led_on = False
 
     def activate_wheel_motor(self) -> None:
         """
