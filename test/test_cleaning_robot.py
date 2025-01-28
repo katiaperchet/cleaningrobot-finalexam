@@ -86,16 +86,20 @@ class TestCleaningRobot(TestCase):
         mock_pins.assert_has_calls(calls, any_order=True)
         self.assertFalse(robot.cleaning_system_on)
 
+    @patch.object(IBS, "get_charge_left")
     @patch.object(CleaningRobot, "activate_wheel_motor")
-    def test_execute_command_forward_Y_axis(self, mock_robot: Mock):
+    def test_execute_command_forward_Y_axis(self, mock_robot: Mock, mock_battery: Mock):
+        mock_battery.return_value = 11
         robot = CleaningRobot()
         robot.initialize_robot()
         result = robot.execute_command(robot.FORWARD)
         mock_robot.assert_called_once()
         self.assertEqual("(0,1,N)", result)
 
+    @patch.object(IBS, "get_charge_left")
     @patch.object(CleaningRobot, "activate_wheel_motor")
-    def test_execute_command_forward_X_axis(self, mock_robot: Mock):
+    def test_execute_command_forward_X_axis(self, mock_robot: Mock, mock_battery: Mock):
+        mock_battery.return_value=11
         robot = CleaningRobot()
         robot.initialize_robot()
         robot.heading = robot.W
@@ -103,25 +107,31 @@ class TestCleaningRobot(TestCase):
         mock_robot.assert_called_once()
         self.assertEqual("(1,0,W)", result)
 
+    @patch.object(IBS, "get_charge_left")
     @patch.object(CleaningRobot, "activate_rotation_motor")
-    def test_execute_command_left(self, mock_robot: Mock):
+    def test_execute_command_left(self, mock_robot: Mock, mock_battery: Mock):
+        mock_battery.return_value = 11
         robot = CleaningRobot()
         robot.initialize_robot()
         result = robot.execute_command(robot.LEFT)
         mock_robot.assert_called_once()
         self.assertEqual("(0,0,W)", result)
 
+    @patch.object(IBS, "get_charge_left")
     @patch.object(CleaningRobot, "activate_rotation_motor")
-    def test_execute_command_right(self, mock_robot: Mock):
+    def test_execute_command_right(self, mock_robot: Mock, mock_battery: Mock):
+        mock_battery.return_value = 11
         robot = CleaningRobot()
         robot.initialize_robot()
         result = robot.execute_command(robot.RIGHT)
         mock_robot.assert_called_once()
         self.assertEqual("(0,0,E)", result)
 
+    @patch.object(IBS, "get_charge_left")
     @patch.object(CleaningRobot, "obstacle_found")
     @patch.object(GPIO, "input")
-    def test_detect_obstacle_true_y_axis(self, mock_infrared_distance: Mock, mock_obstacle: Mock):
+    def test_detect_obstacle_true_y_axis(self, mock_infrared_distance: Mock, mock_obstacle: Mock, mock_battery: Mock):
+        mock_battery.return_value = 11
         mock_infrared_distance.return_value = True
         robot = CleaningRobot()
         robot.initialize_robot()
@@ -129,9 +139,11 @@ class TestCleaningRobot(TestCase):
         mock_obstacle.assert_called_once()
         self.assertEqual("(0,0,N)(0,1)", result)
 
+    @patch.object(IBS, "get_charge_left")
     @patch.object(CleaningRobot, "obstacle_found")
     @patch.object(GPIO, "input")
-    def test_detect_obstacle_true_x_axis(self, mock_infrared_distance: Mock, mock_obstacle: Mock):
+    def test_detect_obstacle_true_x_axis(self, mock_infrared_distance: Mock, mock_obstacle: Mock, mock_battery: Mock):
+        mock_battery.return_value = 11
         mock_infrared_distance.return_value = True
         robot = CleaningRobot()
         robot.initialize_robot()
