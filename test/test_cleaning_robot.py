@@ -93,3 +93,12 @@ class TestCleaningRobot(TestCase):
         result = robot.execute_command(robot.FORWARD)
         mock_robot.assert_called_once()
         self.assertEqual("(0,1,N)", result)
+
+    @patch.object(CleaningRobot, "activate_wheel_motor")
+    def test_execute_command_forward_X_axis(self, mock_robot: Mock):
+        robot = CleaningRobot()
+        robot.initialize_robot()
+        robot.heading = robot.W
+        result = robot.execute_command(robot.FORWARD)
+        mock_robot.assert_called_once()
+        self.assertEqual("(1,0,W)", result)
