@@ -102,10 +102,10 @@ class TestCleaningRobot(TestCase):
         mock_battery.return_value=11
         robot = CleaningRobot()
         robot.initialize_robot()
-        robot.heading = robot.W
+        robot.heading = robot.E
         result = robot.execute_command(robot.FORWARD)
         mock_robot.assert_called_once()
-        self.assertEqual("(1,0,W)", result)
+        self.assertEqual("(1,0,E)", result)
 
     @patch.object(IBS, "get_charge_left")
     @patch.object(CleaningRobot, "activate_rotation_motor")
