@@ -3,7 +3,7 @@ from unittest.mock import Mock, patch, call
 
 from mock import GPIO
 from mock.ibs import IBS
-from src.cleaning_robot import CleaningRobot
+from src.cleaning_robot import CleaningRobot, CleaningRobotError
 
 
 class TestCleaningRobot(TestCase):
@@ -182,3 +182,11 @@ class TestCleaningRobot(TestCase):
         self.assertFalse(robot.cleaning_system_on)
         self.assertTrue(robot.recharge_led_on)
         self.assertEqual("!(1,1,N)", result)
+
+    """User Story #6: If the direction to rotate entered in the activate_rotation_motor is not in the
+        specified options (LEFT, RIGHT) - This method raises a CleaningRobotError """
+
+    def test_cleaningRobotError_wrong_direction_rotation_motor(self):
+        robot = CleaningRobot()
+        robot.initialize_robot()
+        self.assertRaises(CleaningRobotError, robot.activate_rotation_motor, "U")
