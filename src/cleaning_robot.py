@@ -19,6 +19,9 @@ class CleaningRobot:
     CLEANING_SYSTEM_PIN = 13
     INFRARED_PIN = 15
 
+    ##Added
+    BUZZER_PIN = 14
+
     # Wheel motor pins
     PWMA = 16
     AIN2 = 18
@@ -64,6 +67,9 @@ class CleaningRobot:
         self.recharge_led_on = False
         self.cleaning_system_on = False
 
+        ##Added
+        self.buzzer_on = False
+
     def initialize_robot(self) -> None:
         self.pos_x = 0
         self.pos_y = 0
@@ -105,6 +111,14 @@ class CleaningRobot:
         elif direction == self.RIGHT:
             position_current_heading += 1
         return headings[position_current_heading]
+
+    def make_buzzer_buzz(self, errors: int):
+        if errors > 1:
+            GPIO.output(self.BUZZER_PIN, True)
+            self.buzzer_on = True
+        else:
+            GPIO.output(self.BUZZER_PIN, False)
+            self.buzzer_on = False
 
     def obstacle_found(self) -> bool:
         return GPIO.input(self.INFRARED_PIN)
