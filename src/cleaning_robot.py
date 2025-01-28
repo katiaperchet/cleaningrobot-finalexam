@@ -82,10 +82,15 @@ class CleaningRobot:
         if self.ibs.get_charge_left() > 10:
             if command == self.FORWARD:
                 posy, posx = self.pos_y, self.pos_x
-                if self.heading in [self.N, self.S]:
-                    posy += 1
-                elif self.heading in [self.E, self.W]:
-                    posx += 1
+                if self.heading == self.N:
+                    posy +=1
+                elif self.heading == self.S:
+                    posy-=1
+                elif self.heading == self.E:
+                    posx+=1
+                elif self.heading == self.W:
+                    posx-=1
+
 
                 if not self.obstacle_found():
                     self.activate_wheel_motor()
