@@ -84,6 +84,15 @@ class CleaningRobot:
             self.heading = self.W
         return self.robot_status()
 
+    def calculate_new_heading(self, current_heading: str, direction: str) -> str:
+        headings = [self.N, self.E, self.S, self.W]
+        position_current_heading = headings.index(current_heading)
+        if direction == self.LEFT:
+            position_current_heading -= 1
+        elif direction == self.RIGHT:
+            position_current_heading += 1
+        return headings[position_current_heading]
+
     def obstacle_found(self) -> bool:
         # To be implemented
         pass
