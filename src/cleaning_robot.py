@@ -73,25 +73,29 @@ class CleaningRobot:
         return "("+ str(self.pos_x) + "," + str(self.pos_y)+"," + str(self.heading)+")"
 
     def execute_command(self, command: str) -> str:
-        if command == self.FORWARD:
-            posy, posx = self.pos_y, self.pos_x
-            if self.heading in [self.N, self.S]:
-                posy += 1
-            elif self.heading in [self.E, self.W]:
-                posx += 1
+        if self.ibs.get_charge_left() > 10:
+            if command == self.FORWARD:
+                posy, posx = self.pos_y, self.pos_x
+                if self.heading in [self.N, self.S]:
+                    posy += 1
+                elif self.heading in [self.E, self.W]:
+                    posx += 1
 
-            if not self.obstacle_found():
-                self.activate_wheel_motor()
-                self.pos_y, self.pos_x = posy, posx
-            else:
-                return self.robot_status()+"("+str(posx)+","+str(posy)+")"
-        elif command == self.LEFT:
-            self.activate_rotation_motor(self.LEFT)
-            self.heading = self.calculate_new_heading(self.heading, self.LEFT)
-        elif command == self.RIGHT:
-            self.activate_rotation_motor(self.RIGHT)
-            self.heading = self.calculate_new_heading(self.heading, self.RIGHT)
-        return self.robot_status()
+                if not self.obstacle_found():
+                    self.activate_wheel_motor()
+                    self.pos_y, self.pos_x = posy, posx
+                else:
+                    return self.robot_status()+"("+str(posx)+","+str(posy)+")"
+            elif command == self.LEFT:
+                self.activate_rotation_motor(self.LEFT)
+                self.heading = self.calculate_new_heading(self.heading, self.LEFT)
+            elif command == self.RIGHT:
+                self.activate_rotation_motor(self.RIGHT)
+                self.heading = self.calculate_new_heading(self.heading, self.RIGHT)
+            return self.robot_status()
+        elif self.ibs.get_charge_left()<10:
+            self.manage_cleaning_system()
+            return "!"+self.robot_status()
 
     def calculate_new_heading(self, current_heading: str, direction: str) -> str:
         headings = [self.N, self.E, self.S, self.W]
