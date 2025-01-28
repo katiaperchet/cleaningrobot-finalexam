@@ -93,7 +93,7 @@ class CleaningRobot:
                 self.activate_rotation_motor(self.RIGHT)
                 self.heading = self.calculate_new_heading(self.heading, self.RIGHT)
             return self.robot_status()
-        elif self.ibs.get_charge_left()<10:
+        else:
             self.manage_cleaning_system()
             return "!"+self.robot_status()
 
