@@ -82,7 +82,13 @@ class CleaningRobot:
                 elif self.heading in [self.E, self.W]:
                     self.pos_x += 1
             else:
-                return self.robot_status() + "(" + str(self.pos_x) + "," + str(self.pos_y + 1) + ")"
+                posy = self.pos_y
+                posx= self.pos_x
+                if self.heading in [self.N, self.S]:
+                    posy += 1
+                elif self.heading in [self.E, self.W]:
+                    posx += 1
+                return self.robot_status() + "(" + str(posx) + "," + str(posy) + ")"
         elif command == self.LEFT:
             self.activate_rotation_motor(self.LEFT)
             self.heading = self.calculate_new_heading(self.heading, self.LEFT)
