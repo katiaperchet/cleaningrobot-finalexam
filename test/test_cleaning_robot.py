@@ -128,3 +128,14 @@ class TestCleaningRobot(TestCase):
         result = robot.execute_command(robot.FORWARD)
         mock_obstacle.assert_called_once()
         self.assertEqual("(0,0,N)(0,1)", result)
+
+    @patch.object(CleaningRobot, "obstacle_found")
+    @patch.object(GPIO, "input")
+    def test_detect_obstacle_true_x_axis(self, mock_infrared_distance: Mock, mock_obstacle: Mock):
+        mock_infrared_distance.return_value = True
+        robot = CleaningRobot()
+        robot.initialize_robot()
+        robot.heading = robot.E
+        result = robot.execute_command(robot.FORWARD)
+        mock_obstacle.assert_called_once()
+        self.assertEqual("(0,0,E)(1,0)", result)
