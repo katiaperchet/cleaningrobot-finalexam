@@ -154,3 +154,19 @@ class TestCleaningRobot(TestCase):
         self.assertFalse(robot.cleaning_system_on)
         self.assertTrue(robot.recharge_led_on)
         self.assertEqual("!(1,1,N)",result)
+
+    @patch.object(GPIO, "output")
+    @patch.object(IBS, "get_charge_left")
+    @patch.object(CleaningRobot, "robot_status")
+    def test_charge_left_equal_10_cleaningOff_ledOn_stayStill_commandForward(self, mock_robot_status: Mock,
+                                                                            mock_battery: Mock, mock_pins: Mock):
+        mock_battery.return_value = 10
+        mock_robot_status.return_value = "(1,1,N)"
+        robot = CleaningRobot()
+        result = robot.execute_command(robot.FORWARD)
+        calls = [((robot.CLEANING_SYSTEM_PIN, False),),
+                 ((robot.RECHARGE_LED_PIN, True),)]
+        mock_pins.assert_has_calls(calls, any_order=True)
+        self.assertFalse(robot.cleaning_system_on)
+        self.assertTrue(robot.recharge_led_on)
+        self.assertEqual("!(1,1,N)", result)
