@@ -147,6 +147,9 @@ class CleaningRobot:
         Let the robot rotate towards a given direction
         :param direction: "l" to turn left, "r" to turn right
         """
+        if direction not in [self.LEFT, self.RIGHT]:
+            raise CleaningRobotError()
+
         if direction == self.LEFT:
             GPIO.output(self.BIN1, GPIO.HIGH)
             GPIO.output(self.BIN2, GPIO.LOW)
