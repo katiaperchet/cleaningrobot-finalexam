@@ -194,7 +194,6 @@ class TestCleaningRobot(TestCase):
     """User Story #7: When all of the paths where the cleaning robot can go are blocked by a
         obstacle, a buzzer will start to buzz. Buzzer is in the PIN 14. The communication is via GPIO.output(channel) this
         function return True when the robot is stuck and False when is able to move"""
-
     @patch.object(IBS, "get_charge_left")
     @patch.object(CleaningRobot, "obstacle_found")
     @patch.object(GPIO, "output")
@@ -217,4 +216,42 @@ class TestCleaningRobot(TestCase):
 
         robot.make_buzzer_buzz(block_way)
         mock_buzzer.assert_called_with(robot.BUZZER_PIN,True)
+        self.assertTrue(robot.buzzer_on)
+
+    @patch.object(IBS, "get_charge_left")
+    @patch.object(CleaningRobot, "obstacle_found")
+    @patch.object(GPIO, "output")
+    @patch.object(GPIO, "input")
+    def test_robot_stuck_buzzerOn_four_ways_blocked(self, mock_infrared: Mock, mock_buzzer: Mock, mock_obstacle: Mock,
+                                                   mock_battery: Mock):
+        mock_battery.return_value = 11
+        mock_infrared.return_value = True
+        mock_obstacle.return_value = True
+        robot = CleaningRobot()
+        robot.pos_x=1
+        robot.pos_y=1
+        robot.heading = robot.N
+        block_way = 0
+
+        result = robot.execute_command(robot.FORWARD)
+        self.assertEqual("(1,1,N)(1,2)", result)
+        block_way += 1
+
+        robot.heading = robot.E
+        result = robot.execute_command(robot.FORWARD)
+        self.assertEqual("(1,1,E)(2,1)", result)
+        block_way += 1
+
+        robot.heading = robot.S
+        result = robot.execute_command(robot.FORWARD)
+        self.assertEqual("(1,1,S)(1,0)", result)
+        block_way += 1
+
+        robot.heading = robot.W
+        result = robot.execute_command(robot.FORWARD)
+        self.assertEqual("(1,1,W)(0,1)", result)
+        block_way += 1
+
+        robot.make_buzzer_buzz(block_way)
+        mock_buzzer.assert_called_with(robot.BUZZER_PIN, True)
         self.assertTrue(robot.buzzer_on)
