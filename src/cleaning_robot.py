@@ -74,11 +74,15 @@ class CleaningRobot:
 
     def execute_command(self, command: str) -> str:
         if command == self.FORWARD:
-            self.activate_wheel_motor()
-            if self.heading in [self.N, self.S]:
-                self.pos_y += 1
-            elif self.heading in [self.E, self.W]:
-                self.pos_x += 1
+            obstacle = self.obstacle_found()
+            if not obstacle:
+                self.activate_wheel_motor()
+                if self.heading in [self.N, self.S]:
+                    self.pos_y += 1
+                elif self.heading in [self.E, self.W]:
+                    self.pos_x += 1
+            else:
+                return self.robot_status() + "(" + str(self.pos_x) + "," + str(self.pos_y + 1) + ")"
         elif command == self.LEFT:
             self.activate_rotation_motor(self.LEFT)
             self.heading = self.calculate_new_heading(self.heading, self.LEFT)
@@ -97,8 +101,7 @@ class CleaningRobot:
         return headings[position_current_heading]
 
     def obstacle_found(self) -> bool:
-        # To be implemented
-        pass
+        return GPIO.input(self.INFRARED_PIN)
 
     def manage_cleaning_system(self) -> None:
         if self.ibs.get_charge_left() > 10:
