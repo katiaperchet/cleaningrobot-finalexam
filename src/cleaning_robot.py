@@ -123,10 +123,11 @@ class CleaningRobot:
         ##if the robot is in the initial position, it will have only 2 headings as options
         ##if the robot is in the middle position (1,1), it will have 4 headings as options
         ##if the robot is in the rest of the bord, it will have 3 headings as options.
-        headings=[actual_heading]
+        headings=[]
         for command in next_commands:
             heading= self.calculate_new_heading(actual_heading, command)
             headings.append(heading)
+            actual_heading= heading
 
         block_way = 0
         for heading in headings:
