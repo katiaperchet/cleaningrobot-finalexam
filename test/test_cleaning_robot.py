@@ -204,17 +204,8 @@ class TestCleaningRobot(TestCase):
         mock_obstacle.return_value = True
         robot = CleaningRobot()
         robot.initialize_robot()
-        block_way = 0
-        
-        result = robot.execute_command(robot.FORWARD)
-        self.assertEqual("(0,0,N)(0,1)", result)
-        block_way += 1
-        robot.heading = robot.E
-        result = robot.execute_command(robot.FORWARD)
-        self.assertEqual("(0,0,E)(1,0)", result)
-        block_way += 1
-
-        robot.make_buzzer_buzz(block_way)
+        headings=[robot.heading, robot.E]
+        robot.make_buzzer_buzz(headings)
         mock_buzzer.assert_called_with(robot.BUZZER_PIN,True)
         self.assertTrue(robot.buzzer_on)
 

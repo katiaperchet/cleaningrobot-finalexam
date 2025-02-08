@@ -69,6 +69,7 @@ class CleaningRobot:
 
         ##Added
         self.buzzer_on = False
+        self.block_way= False
 
     def initialize_robot(self) -> None:
         self.pos_x = 0
@@ -91,11 +92,12 @@ class CleaningRobot:
                 elif self.heading == self.W:
                     posx-=1
 
-
                 if not self.obstacle_found():
+                    self.block_way = False
                     self.activate_wheel_motor()
                     self.pos_y, self.pos_x = posy, posx
                 else:
+                    self.block_way = True
                     return self.robot_status()+"("+str(posx)+","+str(posy)+")"
             elif command == self.LEFT:
                 self.activate_rotation_motor(self.LEFT)
@@ -117,8 +119,21 @@ class CleaningRobot:
             position_current_heading += 1
         return headings[position_current_heading]
 
-    def make_buzzer_buzz(self, errors: int):
-        if errors > 1:
+    def make_buzzer_buzz(self, headings: list):
+        ##if the robot is in the initial position, it will have only 2 headings as options
+        ##if the robot is in the middle position (1,1), it will have 4 headings as options
+        ##if the robot is in the rest of the bord, it will have 3 headings as options.
+
+        block_way = 0
+        for heading in headings:
+            self.execute_command(self.FORWARD)
+            if self.block_way:
+                block_way += 1
+            else:
+                if block_way !=0:
+                    block_way -= 1
+
+        if block_way > 1:
             GPIO.output(self.BUZZER_PIN, True)
             self.buzzer_on = True
         else:
