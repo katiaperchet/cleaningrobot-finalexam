@@ -119,10 +119,14 @@ class CleaningRobot:
             position_current_heading += 1
         return headings[position_current_heading]
 
-    def make_buzzer_buzz(self, headings: list):
+    def make_buzzer_buzz(self, actual_heading: str, next_commands: list):
         ##if the robot is in the initial position, it will have only 2 headings as options
         ##if the robot is in the middle position (1,1), it will have 4 headings as options
         ##if the robot is in the rest of the bord, it will have 3 headings as options.
+        headings=[actual_heading]
+        for command in next_commands:
+            heading= self.calculate_new_heading(actual_heading, command)
+            headings.append(heading)
 
         block_way = 0
         for heading in headings:
