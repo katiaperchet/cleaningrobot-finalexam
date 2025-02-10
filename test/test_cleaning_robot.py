@@ -195,13 +195,11 @@ class TestCleaningRobot(TestCase):
         obstacle, a buzzer will start to buzz. Buzzer is in the PIN 14. The communication is via GPIO.output(channel) this
         function return True when the robot is stuck and False when is able to move"""
     @patch.object(IBS, "get_charge_left")
-    @patch.object(CleaningRobot, "obstacle_found")
     @patch.object(GPIO, "output")
     @patch.object(GPIO, "input")
-    def test_robot_stuck_buzzerOn_two_ways_blocked(self, mock_infrared: Mock, mock_buzzer: Mock, mock_obstacle: Mock, mock_battery: Mock):
+    def test_robot_stuck_buzzerOn_two_ways_blocked(self, mock_infrared: Mock, mock_buzzer: Mock, mock_battery: Mock):
         mock_battery.return_value= 11
         mock_infrared.return_value = True
-        mock_obstacle.return_value = True
         robot = CleaningRobot()
         robot.initialize_robot()
         commands=[robot.FORWARD, robot.LEFT]
@@ -210,14 +208,12 @@ class TestCleaningRobot(TestCase):
         self.assertTrue(robot.buzzer_on)
 
     @patch.object(IBS, "get_charge_left")
-    @patch.object(CleaningRobot, "obstacle_found")
     @patch.object(GPIO, "output")
     @patch.object(GPIO, "input")
-    def test_robot_stuck_buzzerOn_four_ways_blocked(self, mock_infrared: Mock, mock_buzzer: Mock, mock_obstacle: Mock,
+    def test_robot_stuck_buzzerOn_four_ways_blocked(self, mock_infrared: Mock, mock_buzzer: Mock,
                                                    mock_battery: Mock):
         mock_battery.return_value = 11
         mock_infrared.return_value = True
-        mock_obstacle.return_value = True
         robot = CleaningRobot()
         robot.initialize_robot()
         commands=[robot.FORWARD, robot.LEFT, robot.LEFT, robot.LEFT]
